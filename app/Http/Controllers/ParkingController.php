@@ -7,6 +7,7 @@ use App\Service\Parking\ParkingServiceInterface;
 use App\Http\Resources\ParkingResource;
 use App\Http\Requests\ParkingRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ParkingController extends Controller
 {
@@ -19,7 +20,7 @@ class ParkingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() : ResourceCollection
     {
         return ParkingResource::collection($this->repo->all());
     }
