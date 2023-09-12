@@ -8,6 +8,7 @@ use App\Repository\ParkingRepositoryInterface;
 use App\Repository\SlotRepositoryInterface;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 class ParkingService implements ParkingServiceInterface {
 
@@ -17,7 +18,7 @@ class ParkingService implements ParkingServiceInterface {
         protected SlotRepositoryInterface $parkingSlotRepo
     ){}
 
-    public function park(array $parkingData) : bool
+    public function park(array $parkingData) : ?Model
     {
         $hasActiveParking = $this->parkingRepo->hasActiveParking($parkingData['registration_id']);
         if($hasActiveParking) {
@@ -38,7 +39,7 @@ class ParkingService implements ParkingServiceInterface {
         if (!$parked->exists) {
             abort(500, 'Something went wrong! call Spiderman! ');
         }
-        return $parked->exists;
+        return $parked;
     }
 
     public function unpark(int $id) : bool
