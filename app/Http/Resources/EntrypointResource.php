@@ -16,6 +16,7 @@ class EntrypointResource extends JsonResource
     public function toArray(Request $request): array
     {   
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'slots' => SlotResource::collection($this->slots)
         ];
