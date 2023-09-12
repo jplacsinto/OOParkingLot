@@ -27,8 +27,7 @@ class ParkingController extends Controller
 
     public function park(ParkingRequest $request) : JsonResponse
     {
-        $parkingData = $request->validated();
-        $this->service->park($parkingData);
+        $this->service->park($request->validated());
         return  response()->json('Vehicle parking registered successfully.', 201);
     }
 

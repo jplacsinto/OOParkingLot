@@ -36,7 +36,7 @@ class ParkingService implements ParkingServiceInterface {
 
         $parked = $this->parkingRepo->create($parkingData);
         if (!$parked->exists) {
-            abort(500, 'Something went wrong! Call Spiderman! ');
+            abort(500, 'Something went wrong! call Spiderman! ');
         }
         return $parked->exists;
     }
