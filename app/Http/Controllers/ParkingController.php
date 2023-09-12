@@ -34,6 +34,6 @@ class ParkingController extends Controller
     public function unpark(int $id) : JsonResponse
     {
         $parking = $this->service->unpark($id);
-        return  response()->json($parking, 200);
+        return  response()->json(new ParkingResource($parking), 200);
     }
 }

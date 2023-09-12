@@ -35,6 +35,11 @@ class ParkingService implements ParkingServiceInterface {
             throw ValidationException::withMessages(['slot_id' => $errMessage]);
         }
 
+        if( $slot->occupant ) {
+            $errMessage = 'Slot is occupied';
+            throw ValidationException::withMessages(['slot_id' => $errMessage]);
+        }
+
         //validate vehicle size if valid
         if( !in_array($parkingData['vehicle_size'], [0,1,2]) ||
             $parkingData['vehicle_size'] > $slot->size
