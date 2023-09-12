@@ -21,4 +21,9 @@ class Parking extends Model
     {
         return $this->hasOne(Slot::class, 'id', 'slot_id');
     }
+
+    public function entrypoint(): HasOne
+    {
+        return $this->hasOne(Entrypoint::class, 'id', 'entrypoint_id');
+    }
 }

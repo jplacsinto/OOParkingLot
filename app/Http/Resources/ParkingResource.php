@@ -16,7 +16,7 @@ class ParkingResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'entrypoint_id' => $this->entrypoint_id,
+            'entrypoint' => $this->entrypoint->name,
             'slot_id' => $this->slot_id,
             'size' => $this->slot->size,
             'registration_id' => $this->registration_id,
