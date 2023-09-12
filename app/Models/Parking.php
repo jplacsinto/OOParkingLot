@@ -13,7 +13,8 @@ class Parking extends Model
         'registration_id',
         'parking_time',
         'total_fee',
-        'slot_id'
+        'slot_id',
+        'entrypoint_id'
     ];
 
     public function slot(): HasOne

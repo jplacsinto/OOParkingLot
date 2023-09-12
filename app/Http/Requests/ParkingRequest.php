@@ -25,6 +25,7 @@ class ParkingRequest extends FormRequest
     {
         return [
             'registration_id' => 'required|max:15',
+            'entrypoint_id' => 'required|numeric',
             'vehicle_size' => 'required|numeric',
             'slot_id' => 'required|numeric'
         ];

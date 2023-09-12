@@ -4,6 +4,7 @@ namespace App\Repository\Eloquent;
 
 use App\Models\Entrypoint;
 use App\Repository\EntrypointRepositoryInterface;
+use Illuminate\Database\Eloquent\Model;
 
 class EntrypointRepository extends BaseRepository implements EntrypointRepositoryInterface
 {

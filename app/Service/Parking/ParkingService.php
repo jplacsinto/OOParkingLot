@@ -6,6 +6,7 @@ use App\Service\Parking\ParkingServiceInterface;
 
 use App\Repository\ParkingRepositoryInterface;
 use App\Repository\SlotRepositoryInterface;
+use App\Repository\EntrypointRepositoryInterface;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,7 @@ class ParkingService implements ParkingServiceInterface {
 
     public function __construct(
         protected ParkingRepositoryInterface $parkingRepo,
+        protected EntrypointRepositoryInterface $entrypointRepository,
         protected SlotRepositoryInterface $parkingSlotRepo
     ){}
 
@@ -26,8 +28,14 @@ class ParkingService implements ParkingServiceInterface {
             throw ValidationException::withMessages(['registration_id' => $errMessage]);
         }
 
+        $entrypoint = $this->entrypointRepository->findById($parkingData['entrypoint_id']);
+        $slot = $entrypoint->slots()->where('slot_id', $parkingData['slot_id'])->first();
+        if( !$slot ) {
+            $errMessage = 'The slot is not accessible to this entrypoint';
+            throw ValidationException::withMessages(['slot_id' => $errMessage]);
+        }
+
         //validate vehicle size if valid
-        $slot = $this->parkingSlotRepo->findById($parkingData['slot_id']);
         if( !in_array($parkingData['vehicle_size'], [0,1,2]) ||
             $parkingData['vehicle_size'] > $slot->size
         ) {
@@ -42,7 +50,7 @@ class ParkingService implements ParkingServiceInterface {
         return $parked;
     }
 
-    public function unpark(int $id) : bool
+    public function unpark(int $id) : ?Model
     {
         $parking = $this->parkingRepo->findById($id);
 
@@ -103,14 +111,16 @@ class ParkingService implements ParkingServiceInterface {
                 $totalFee = ceil($totalHours) * $parkingRate;
             }
 
+            $parking->update([
+                'parking_time' => $totalSeconds,
+                'date_unparked' => $unparkDate,
+                'total_fee' => floatval($totalFee)
+            ]);
+
+            return $parking;
+
         } catch ( \Exception $e) {
             abort(500, $e->getMessage());
         }
-
-        return $parking->update([
-            'parking_time' => $totalSeconds,
-            'date_unparked' => $unparkDate,
-            'total_fee' => floatval($totalFee)
-        ]);
     }
 }
